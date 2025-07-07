@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import { divIcon } from 'leaflet';
 import { Incident } from '@/types/incident';
 import 'leaflet/dist/leaflet.css';
@@ -12,6 +12,18 @@ interface MapViewProps {
   onMapClick?: (lat: number, lng: number) => void;
   isReporting?: boolean;
 }
+
+// Separate component for handling map clicks
+const MapClickHandler: React.FC<{ onMapClick?: (lat: number, lng: number) => void }> = ({ onMapClick }) => {
+  useMapEvents({
+    click: (e) => {
+      if (onMapClick) {
+        onMapClick(e.latlng.lat, e.latlng.lng);
+      }
+    },
+  });
+  return null;
+};
 
 const MapView: React.FC<MapViewProps> = ({ 
   incidents, 
@@ -46,25 +58,6 @@ const MapView: React.FC<MapViewProps> = ({
     iconAnchor: [12, 12]
   });
 
-  const MapClickHandler = () => {
-    React.useEffect(() => {
-      if (!isReporting || !onMapClick) return;
-
-      const map = document.querySelector('.leaflet-container') as any;
-      if (!map) return;
-
-      const handleClick = (e: any) => {
-        const { lat, lng } = e.latlng;
-        onMapClick(lat, lng);
-      };
-
-      map._leaflet.on('click', handleClick);
-      return () => map._leaflet.off('click', handleClick);
-    }, []);
-
-    return null;
-  };
-
   return (
     <div className="relative w-full h-full">
       <style>{`
@@ -85,7 +78,7 @@ const MapView: React.FC<MapViewProps> = ({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
-        {isReporting && <MapClickHandler />}
+        {isReporting && onMapClick && <MapClickHandler onMapClick={onMapClick} />}
         
         {incidents.map((incident) => (
           <Marker
