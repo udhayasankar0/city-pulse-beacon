@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     // Better source maps for debugging extension conflicts
-    sourcemap: mode === 'development',
+    sourcemap: true, // Always enable sourcemaps for debugging
     // Use more readable variable names to avoid conflicts
     minify: mode === 'production' ? 'terser' : false,
     terserOptions: mode === 'production' ? {
