@@ -19,4 +19,20 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    // Better source maps for debugging extension conflicts
+    sourcemap: mode === 'development',
+    // Use more readable variable names to avoid conflicts
+    minify: mode === 'production' ? 'terser' : false,
+    terserOptions: mode === 'production' ? {
+      mangle: {
+        // Preserve some common variable names to avoid conflicts
+        reserved: ['r', 'React', 'ReactDOM', 'window', 'document']
+      }
+    } : undefined,
+  },
+  define: {
+    // Helps with extension detection
+    __DEV__: mode === 'development',
+  }
 }));
