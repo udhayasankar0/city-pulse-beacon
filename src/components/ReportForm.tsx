@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Camera, MapPin } from 'lucide-react';
 import { Incident } from '@/types/incident';
 import MapView from './MapView';
@@ -79,7 +79,7 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit, existingIncidents }) 
           </div>
         </div>
         
-        <div className="flex-1">
+        <div className="flex-1 h-[60vh]">
           <MapView
             incidents={existingIncidents}
             onIncidentClick={() => {}}
@@ -115,17 +115,17 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit, existingIncidents }) 
               </button>
             </div>
           ) : (
-            <label className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-gray-400 transition-colors">
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors">
               <Camera size={48} className="mx-auto text-gray-400 mb-4" />
               <p className="text-gray-600">Tap to upload photo</p>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleImageUpload}
-                className="hidden"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 required
               />
-            </label>
+            </div>
           )}
         </div>
 
