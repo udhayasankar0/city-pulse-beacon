@@ -74,6 +74,19 @@ const MapView: React.FC<MapViewProps> = ({
           0%, 100% { opacity: 1; transform: scale(1); }
           50% { opacity: 0.7; transform: scale(1.1); }
         }
+        .custom-popup .leaflet-popup-content-wrapper {
+          background: transparent;
+          border-radius: 0;
+          box-shadow: none;
+          padding: 0;
+        }
+        .custom-popup .leaflet-popup-content {
+          margin: 0;
+          padding: 0;
+        }
+        .custom-popup .leaflet-popup-tip {
+          background: white;
+        }
       `}</style>
       
       <MapContainer
@@ -95,13 +108,19 @@ const MapView: React.FC<MapViewProps> = ({
             position={[incident.location.lat, incident.location.lng]}
             icon={createCustomIcon(incident.type)}
           >
-            <Popup>
-              <div className="p-2">
-                <h3 className="font-semibold text-sm mb-1">{incident.title}</h3>
-                <p className="text-xs text-gray-600 mb-2">{incident.shortSummary}</p>
+            <Popup closeButton={false} className="custom-popup">
+              <div className="relative bg-white rounded-lg shadow-lg p-4 max-w-xs">
+                <button
+                  onClick={() => {/* Close popup */}}
+                  className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 text-lg leading-none"
+                >
+                  ×
+                </button>
+                <h3 className="font-medium text-[#004080] mb-2 pr-6">{incident.title}</h3>
+                <p className="text-gray-700 mb-4 text-sm">{incident.shortSummary}</p>
                 <button
                   onClick={() => onIncidentClick(incident)}
-                  className="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700 transition-colors"
+                  className="w-full bg-[#004080] text-white py-2 rounded-md hover:bg-[#003060] transition-colors text-sm font-medium"
                 >
                   View Details
                 </button>
