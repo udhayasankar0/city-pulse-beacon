@@ -13,7 +13,8 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit }) => {
   const [image, setImage] = useState<string>('');
   const [description, setDescription] = useState('');
   const [title, setTitle] = useState('');
-  const [type, setType] = useState<Incident['type']>('other');
+  const [type, setType] = useState<string>('');
+  const [showDropdown, setShowDropdown] = useState(false);
   const [location, setLocation] = useState<{ lat: number; lng: number; name: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -53,7 +54,7 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!image || !location || !title.trim()) {
+    if (!image || !location || !title.trim() || !type.trim()) {
       alert('Please take a photo with GPS location, add a title, and select a category');
       return;
     }
@@ -64,14 +65,14 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit }) => {
       shortSummary: description.trim() ? description.trim().slice(0, 100) + '...' : title.trim(),
       location,
       image,
-      type,
+      type: type.trim() as Incident['type'],
     };
 
     onSubmit(newIncident);
     setImage('');
     setDescription('');
     setTitle('');
-    setType('other');
+    setType('');
     setLocation(null);
     alert('Incident reported successfully!');
   };
@@ -137,18 +138,38 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit }) => {
 
         {/* Category */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-          <select
-            value={type}
-            onChange={(e) => setType(e.target.value as Incident['type'])}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="traffic">Traffic</option>
-            <option value="weather">Weather</option>
-            <option value="infrastructure">Infrastructure</option>
-            <option value="safety">Safety</option>
-            <option value="other">Other</option>
-          </select>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Category <span className="text-red-500">*</span>
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              onFocus={() => setShowDropdown(true)}
+              onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
+              placeholder="Select or type category..."
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+            {showDropdown && (
+              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                {['Traffic', 'Weather', 'Infrastructure', 'Safety'].map((category) => (
+                  <button
+                    key={category}
+                    type="button"
+                    onClick={() => {
+                      setType(category.toLowerCase());
+                      setShowDropdown(false);
+                    }}
+                    className="w-full text-left px-3 py-2 hover:bg-gray-100 first:rounded-t-lg last:rounded-b-lg"
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Description */}
@@ -181,8 +202,8 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit }) => {
         {/* Submit */}
         <button
           type="submit"
-          disabled={!image || !location || !title.trim()}
-          className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+          disabled={!image || !location || !title.trim() || !type.trim()}
+          className="w-full py-3 px-6 rounded-lg font-medium transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed enabled:bg-[#87CEFA] enabled:text-white enabled:hover:bg-[#5F9EA0]"
         >
           Submit Report
         </button>
