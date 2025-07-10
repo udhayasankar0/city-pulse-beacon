@@ -149,11 +149,11 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit }) => {
               onFocus={() => setShowDropdown(true)}
               onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
               placeholder="Select or type category..."
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-3 border border-input bg-background rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent outline-none transition-colors"
               required
             />
             {showDropdown && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+              <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg animate-in fade-in-0 zoom-in-95">
                 {['Traffic', 'Weather', 'Infrastructure', 'Safety'].map((category) => (
                   <button
                     key={category}
@@ -162,7 +162,7 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit }) => {
                       setType(category.toLowerCase());
                       setShowDropdown(false);
                     }}
-                    className="w-full text-left px-3 py-2 hover:bg-gray-100 first:rounded-t-lg last:rounded-b-lg"
+                    className="w-full text-left px-3 py-2 text-popover-foreground hover:bg-accent hover:text-accent-foreground first:rounded-t-lg last:rounded-b-lg transition-colors"
                   >
                     {category}
                   </button>
