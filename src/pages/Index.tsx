@@ -39,12 +39,12 @@ const Index = () => {
     <div className="flex flex-col h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b px-4 py-4">
-        <h1 className="text-2xl font-bold text-gray-900">City Pulse</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Civic Radar </h1>
         <p className="text-sm text-gray-600">Stay informed about your city</p>
       </header>
 
       {/* Content */}
-      <main className="flex-1 overflow-hidden pb-[60px]"> {/* padding bottom to avoid overlap with footer */}
+      <main className="flex-1 overflow-hidden pb-[60px]"> 
         {activeTab === 'map' && (
           <div className="w-full h-full">
             <MapView
