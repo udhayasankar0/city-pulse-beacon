@@ -54,8 +54,8 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!image || !location || !title.trim() || !type.trim()) {
-      alert('Please take a photo with GPS location, add a title, and select a category');
+    if (!image || !title.trim() || !type.trim()) {
+      alert('Please take a photo, add a title, and select a category');
       return;
     }
 
@@ -202,7 +202,7 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit }) => {
         {/* Submit */}
         <button
           type="submit"
-          disabled={!image || !location || !title.trim() || !type.trim()}
+          disabled={!image || !title.trim() || !type.trim()}
           className="w-full py-3 px-6 rounded-lg font-medium transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed enabled:bg-[#87CEFA] enabled:text-white enabled:hover:bg-[#5F9EA0]"
         >
           Submit Report
