@@ -37,17 +37,37 @@ const Index = () => {
   ];
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
-      {/* Header - Simplified */}
-      <div className="bg-white shadow-sm border-b px-4 py-4 flex-shrink-0">
-        <h1 className="text-2xl font-bold text-gray-900">City Pulse</h1>
-        <p className="text-sm text-gray-600">Stay informed about your city</p>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="px-4 py-4">
+          <h1 className="text-2xl font-bold text-gray-900">City Pulse</h1>
+          <p className="text-sm text-gray-600">Stay informed about your city</p>
+        </div>
+        
+        {/* Tab Navigation */}
+        <div className="flex border-t">
+          {tabs.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => setActiveTab(id as typeof activeTab)}
+              className={`flex-1 flex items-center justify-center py-3 px-4 text-sm font-medium transition-colors ${
+                activeTab === id
+                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              <Icon size={18} className="mr-2" />
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Content Area */}
-      <div className="flex-1 overflow-hidden">
+      {/* Content */}
+      <div className="flex-1">
         {activeTab === 'map' && (
-          <div className="flex-1">
+          <div className="h-[calc(100vh-140px)]">
             <MapView
               incidents={incidents}
               onIncidentClick={handleIncidentClick}
@@ -56,59 +76,25 @@ const Index = () => {
         )}
         
         {activeTab === 'list' && (
-          <div className="h-full overflow-y-auto">
-            <div className="p-4">
-              <div className="mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">Recent Incidents</h2>
-                <p className="text-sm text-gray-600">{incidents.length} incidents reported</p>
-              </div>
-              
-              <IncidentsList
-                incidents={incidents}
-                onIncidentClick={handleIncidentClick}
-              />
+          <div className="p-4">
+            <div className="mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">Recent Incidents</h2>
+              <p className="text-sm text-gray-600">{incidents.length} incidents reported</p>
             </div>
+            
+            <IncidentsList
+              incidents={incidents}
+              onIncidentClick={handleIncidentClick}
+            />
           </div>
         )}
         
         {activeTab === 'report' && (
-          <div className="h-full overflow-y-auto">
-            <ReportForm
-              onSubmit={handleReportSubmit}
-              existingIncidents={incidents}
-            />
-          </div>
+          <ReportForm
+            onSubmit={handleReportSubmit}
+            existingIncidents={incidents}
+          />
         )}
-      </div>
-
-      {/* Bottom Tab Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-[60px] flex items-center z-50">
-        {tabs.map(({ id, label, icon: Icon }) => (
-          <button
-            key={id}
-            onClick={() => setActiveTab(id as typeof activeTab)}
-            className={`flex-1 flex flex-col items-center justify-center py-1 px-2 transition-colors ${
-              activeTab === id
-                ? 'text-[#87CEFA]'
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            <Icon 
-              size={24} 
-              className={`mb-1 ${
-                activeTab === id ? 'text-[#87CEFA]' : 'text-gray-500'
-              }`} 
-            />
-            <span className={`text-xs font-medium ${
-              activeTab === id ? 'text-[#87CEFA]' : 'text-gray-500'
-            }`}>
-              {label}
-            </span>
-            {activeTab === id && (
-              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-[#87CEFA] rounded-full"></div>
-            )}
-          </button>
-        ))}
       </div>
 
       {/* Modal */}
