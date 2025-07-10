@@ -16,6 +16,11 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit }) => {
   const [type, setType] = useState<string>('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [location, setLocation] = useState<{ lat: number; lng: number; name: string } | null>(null);
+  
+  const categories = ['Traffic', 'Weather', 'Infrastructure', 'Safety'];
+  const filteredCategories = categories.filter(category => 
+    category.toLowerCase().startsWith(type.toLowerCase())
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const extractGPSFromImage = (file: File) => {
@@ -154,19 +159,45 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit }) => {
             />
             {showDropdown && (
               <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg animate-in fade-in-0 zoom-in-95">
-                {['Traffic', 'Weather', 'Infrastructure', 'Safety'].map((category) => (
+                {filteredCategories.length > 0 ? (
+                  filteredCategories.map((category) => (
+                    <button
+                      key={category}
+                      type="button"
+                      onClick={() => {
+                        setType(category);
+                        setShowDropdown(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-popover-foreground hover:bg-accent hover:text-accent-foreground first:rounded-t-lg last:rounded-b-lg transition-colors"
+                    >
+                      {category}
+                    </button>
+                  ))
+                ) : type.trim() ? (
                   <button
-                    key={category}
                     type="button"
                     onClick={() => {
-                      setType(category.toLowerCase());
                       setShowDropdown(false);
                     }}
-                    className="w-full text-left px-3 py-2 text-popover-foreground hover:bg-accent hover:text-accent-foreground first:rounded-t-lg last:rounded-b-lg transition-colors"
+                    className="w-full text-left px-3 py-2 text-popover-foreground hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors"
                   >
-                    {category}
+                    Create custom tag: "{type}"
                   </button>
-                ))}
+                ) : (
+                  categories.map((category) => (
+                    <button
+                      key={category}
+                      type="button"
+                      onClick={() => {
+                        setType(category);
+                        setShowDropdown(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-popover-foreground hover:bg-accent hover:text-accent-foreground first:rounded-t-lg last:rounded-b-lg transition-colors"
+                    >
+                      {category}
+                    </button>
+                  ))
+                )}
               </div>
             )}
           </div>
@@ -203,7 +234,11 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit }) => {
         <button
           type="submit"
           disabled={!image || !title.trim() || !type.trim()}
-          className="w-full py-3 px-6 rounded-lg font-medium transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed enabled:bg-[#87CEFA] enabled:text-white enabled:hover:bg-[#5F9EA0]"
+          className={`w-full py-3 px-6 rounded-lg font-medium transition-colors ${
+            !image || !title.trim() || !type.trim()
+              ? 'bg-[#B0B3B8] text-gray-600 cursor-not-allowed'
+              : 'bg-[#87CEFA] text-white cursor-pointer hover:bg-[#6EB8E6]'
+          }`}
         >
           Submit Report
         </button>
