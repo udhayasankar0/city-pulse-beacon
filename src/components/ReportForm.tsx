@@ -234,11 +234,7 @@ const ReportForm: React.FC<ReportFormProps> = ({ onSubmit }) => {
         <button
           type="submit"
           disabled={!image || !title.trim() || !type.trim()}
-          className={`w-full py-3 px-6 rounded-lg font-medium transition-colors ${
-            !image || !title.trim() || !type.trim()
-              ? 'bg-[#B0B3B8] text-gray-600 cursor-not-allowed'
-              : 'bg-[#87CEFA] text-white cursor-pointer hover:bg-[#6EB8E6]'
-          }`}
+          className="w-full py-3 px-6 rounded-lg font-medium transition-colors disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed enabled:bg-primary enabled:text-primary-foreground enabled:hover:bg-primary/90 enabled:cursor-pointer"
         >
           Submit Report
         </button>
