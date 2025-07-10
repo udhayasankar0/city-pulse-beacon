@@ -37,7 +37,7 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="flex flex-col h-screen bg-gray-50">
       {/* Header - Simplified */}
       <div className="bg-white shadow-sm border-b px-4 py-4 flex-shrink-0">
         <h1 className="text-2xl font-bold text-gray-900">City Pulse</h1>
@@ -45,9 +45,9 @@ const Index = () => {
       </div>
 
       {/* Content Area */}
-      <div className="flex-1 overflow-hidden pb-[60px]">
+      <div className="flex-1 overflow-hidden">
         {activeTab === 'map' && (
-          <div className="h-full">
+          <div className="flex-1">
             <MapView
               incidents={incidents}
               onIncidentClick={handleIncidentClick}
