@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MapPin, List, Plus } from 'lucide-react';
 import MapView from '@/components/MapView';
@@ -25,7 +24,7 @@ const Index = () => {
       id: Date.now().toString(),
       timestamp: new Date()
     };
-    
+
     setIncidents(prev => [incident, ...prev]);
     setActiveTab('map');
   };
@@ -38,78 +37,61 @@ const Index = () => {
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
-      {/* Header - Simplified */}
-      <div className="bg-white shadow-sm border-b px-4 py-4 flex-shrink-0">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b px-4 py-4">
         <h1 className="text-2xl font-bold text-gray-900">City Pulse</h1>
         <p className="text-sm text-gray-600">Stay informed about your city</p>
-      </div>
+      </header>
 
-      {/* Content Area */}
-      <div className="flex-1 overflow-hidden">
+      {/* Content */}
+      <main className="flex-1 overflow-hidden pb-[60px]"> {/* padding bottom to avoid overlap with footer */}
         {activeTab === 'map' && (
-          <div className="flex-1">
+          <div className="w-full h-full">
             <MapView
               incidents={incidents}
               onIncidentClick={handleIncidentClick}
             />
           </div>
         )}
-        
+
         {activeTab === 'list' && (
-          <div className="h-full overflow-y-auto">
-            <div className="p-4">
-              <div className="mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">Recent Incidents</h2>
-                <p className="text-sm text-gray-600">{incidents.length} incidents reported</p>
-              </div>
-              
-              <IncidentsList
-                incidents={incidents}
-                onIncidentClick={handleIncidentClick}
-              />
+          <div className="h-full overflow-y-auto p-4">
+            <div className="mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">Recent Incidents</h2>
+              <p className="text-sm text-gray-600">{incidents.length} incidents reported</p>
             </div>
+            <IncidentsList
+              incidents={incidents}
+              onIncidentClick={handleIncidentClick}
+            />
           </div>
         )}
-        
+
         {activeTab === 'report' && (
-          <div className="h-full overflow-y-auto">
+          <div className="h-full overflow-y-auto p-4">
             <ReportForm
               onSubmit={handleReportSubmit}
               existingIncidents={incidents}
             />
           </div>
         )}
-      </div>
+      </main>
 
-      {/* Bottom Tab Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-[60px] flex items-center z-50">
+      {/* Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-[60px] flex items-center z-50">
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
             onClick={() => setActiveTab(id as typeof activeTab)}
-            className={`flex-1 flex flex-col items-center justify-center py-1 px-2 transition-colors ${
-              activeTab === id
-                ? 'text-[#87CEFA]'
-                : 'text-gray-500 hover:text-gray-700'
+            className={`flex-1 flex flex-col items-center justify-center py-1 transition-colors ${
+              activeTab === id ? 'text-blue-500' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            <Icon 
-              size={24} 
-              className={`mb-1 ${
-                activeTab === id ? 'text-[#87CEFA]' : 'text-gray-500'
-              }`} 
-            />
-            <span className={`text-xs font-medium ${
-              activeTab === id ? 'text-[#87CEFA]' : 'text-gray-500'
-            }`}>
-              {label}
-            </span>
-            {activeTab === id && (
-              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-[#87CEFA] rounded-full"></div>
-            )}
+            <Icon size={22} className="mb-0.5" />
+            <span className="text-xs font-medium">{label}</span>
           </button>
         ))}
-      </div>
+      </nav>
 
       {/* Modal */}
       <IncidentModal
