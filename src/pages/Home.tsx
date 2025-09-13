@@ -6,13 +6,14 @@ import ReportCard from '@/components/ReportCard';
 interface HomeProps {
   onReportClick: () => void;
   onReportDetailClick?: (reportId: string) => void;
+  onViewAllReports?: () => void;
 }
 
-const Home: React.FC<HomeProps> = ({ onReportClick, onReportDetailClick }) => {
+const Home: React.FC<HomeProps> = ({ onReportClick, onReportDetailClick, onViewAllReports }) => {
   const { reports } = useReports();
   
-  // Get recent reports (last 5)
-  const recentReports = reports.slice(0, 5);
+  // Get recent reports (last 8 for better mobile view)
+  const recentReports = reports.slice(0, 8);
   
   // Get user's reports (mock - in real app would filter by user ID)
   const myReports = reports.slice(0, 3);
@@ -62,7 +63,15 @@ const Home: React.FC<HomeProps> = ({ onReportClick, onReportDetailClick }) => {
             <TrendingUp size={20} className="text-primary" />
             <h2 className="text-lg font-semibold text-foreground">Recent Reports</h2>
           </div>
-          <span className="text-sm text-muted-foreground">{recentReports.length} reports</span>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">{reports.length} total</span>
+            <button 
+              onClick={onViewAllReports}
+              className="text-xs text-primary hover:text-primary/80 transition-colors font-medium"
+            >
+              View All
+            </button>
+          </div>
         </div>
         
         <div className="space-y-3">

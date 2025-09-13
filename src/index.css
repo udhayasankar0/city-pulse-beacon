@@ -131,7 +131,7 @@
   
   /* Button Variants */
   .btn-primary {
-    @apply bg-primary text-primary-foreground py-3 px-6 rounded-full font-medium transition-transform hover:scale-102 shadow-sm;
+    @apply bg-primary text-primary-foreground py-3 px-6 rounded-full font-medium transition-transform hover:scale-105 shadow-sm;
   }
   
   .btn-fab {

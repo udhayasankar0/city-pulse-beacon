@@ -12,8 +12,8 @@ const Profile: React.FC<ProfileProps> = ({ onReportClick }) => {
 
   // Mock user data - in real app this would come from auth context
   const userData = {
-    name: 'John Citizen',
-    email: 'john.citizen@email.com',
+    name: 'Prabhakaran',
+    email: 'Prabhakaran@UDstudio.in.',
     joinedDate: '2024-01-15',
     avatar: '/placeholder.svg'
   };

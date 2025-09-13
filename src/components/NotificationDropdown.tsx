@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { CheckCheck, X, Bell } from 'lucide-react';
 import { useReports } from '@/context/ReportsContext';
-import { useNavigate } from 'react-router-dom';
 
 interface NotificationDropdownProps {
   onClose: () => void;
@@ -10,7 +9,6 @@ interface NotificationDropdownProps {
 
 const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onClose }) => {
   const { notifications, markNotificationAsRead, markAllNotificationsAsRead } = useReports();
-  const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

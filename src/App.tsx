@@ -13,6 +13,7 @@ import MapPage from '@/pages/MapPage';
 import Recent from '@/pages/Recent';
 import Profile from '@/pages/Profile';
 import { useToast } from '@/hooks/use-toast';
+import { Home as HomeIcon, Map, FileText, User, Plus } from 'lucide-react';
 
 const queryClient = new QueryClient();
 
@@ -37,7 +38,11 @@ const CivicRadarApp = () => {
   const renderActiveTab = () => {
     switch (activeTab) {
       case 'home':
-        return <Home onReportClick={() => setShowReportForm(true)} onReportDetailClick={handleReportClick} />;
+        return <Home
+          onReportClick={() => setShowReportForm(true)}
+          onReportDetailClick={handleReportClick}
+          onViewAllReports={() => setActiveTab('recent')}
+        />;
       case 'map':
         return <MapPage onReportClick={handleReportClick} />;
       case 'recent':
@@ -52,60 +57,96 @@ const CivicRadarApp = () => {
   return (
     <ReportsProvider>
       <div className="flex flex-col h-screen bg-background font-inter">
-        <TopBar />
-        
-        <main className="flex-1 overflow-hidden">
-          {selectedReportId ? (
-            <ReportDetail 
-              reportId={selectedReportId} 
-              onClose={() => setSelectedReportId(null)} 
-            />
-          ) : (
-            <div 
-              className="h-full"
-              id={`panel-${activeTab}`}
-              role="tabpanel"
-              aria-labelledby={`tab-${activeTab}`}
-            >
-              {renderActiveTab()}
-            </div>
-          )}
-        </main>
+        <TopBar onLogoClick={() => setActiveTab('home')} />
 
+        <div className="flex flex-1 overflow-hidden">
+          {/* Desktop Sidebar - Hidden on mobile */}
+          <aside className="hidden md:flex w-64 bg-card-bg border-r border-soft-border flex-col">
+            {/* Sidebar Header */}
+            <div className="p-6 border-b border-soft-border">
+              <h2 className="text-lg font-semibold text-foreground mb-2">Navigation</h2>
+              <p className="text-sm text-muted-foreground">Explore your city reports</p>
+            </div>
+
+            {/* Navigation Menu */}
+            <nav className="flex-1 p-4">
+              <div className="space-y-2">
+                {[
+                  { id: 'home' as const, label: 'Dashboard', icon: HomeIcon, description: 'Overview & stats' },
+                  { id: 'map' as const, label: 'Map View', icon: Map, description: 'Geographic reports' },
+                  { id: 'recent' as const, label: 'All Reports', icon: FileText, description: 'Browse & filter' },
+                  { id: 'profile' as const, label: 'Profile', icon: User, description: 'Your account' }
+                ].map(({ id, label, icon: Icon, description }) => (
+                  <button
+                    key={id}
+                    onClick={() => setActiveTab(id)}
+                    className={`w-full text-left p-4 rounded-xl transition-all duration-200 group ${activeTab === id
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                      }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Icon size={20} className={activeTab === id ? 'text-primary-foreground' : 'text-muted-foreground'} />
+                      <div className="flex-1">
+                        <div className={`font-medium ${activeTab === id ? 'text-primary-foreground' : 'text-foreground'}`}>
+                          {label}
+                        </div>
+                        <div className={`text-xs ${activeTab === id ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>
+                          {description}
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </nav>
+
+            {/* Quick Actions */}
+            <div className="p-4 border-t border-soft-border">
+              <button
+                onClick={() => setShowReportForm(true)}
+                className="w-full bg-primary text-primary-foreground py-3 px-4 rounded-xl font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+              >
+                <Plus size={18} />
+                Report Issue
+              </button>
+            </div>
+          </aside>
+
+          {/* Main Content Area */}
+          <main className="flex-1 overflow-hidden">
+            {selectedReportId ? (
+              <ReportDetail
+                reportId={selectedReportId}
+                onClose={() => setSelectedReportId(null)}
+              />
+            ) : (
+              <div
+                className="h-full"
+                id={`panel-${activeTab}`}
+                role="tabpanel"
+                aria-labelledby={`tab-${activeTab}`}
+              >
+                {renderActiveTab()}
+              </div>
+            )}
+          </main>
+        </div>
+
+        {/* Mobile Bottom Navigation */}
         <BottomNav
           activeTab={activeTab}
           onTabChange={setActiveTab}
           onReportClick={() => setShowReportForm(true)}
         />
 
-        {/* Desktop Navigation - Hidden on mobile */}
-        <div className="hidden md:block fixed top-20 left-4 bg-card-bg rounded-2xl shadow-soft border border-soft-border p-2">
-          <nav className="flex flex-col gap-1">
-            {[
-              { id: 'home' as const, label: 'Home' },
-              { id: 'map' as const, label: 'Map' },
-              { id: 'recent' as const, label: 'Recent' },
-              { id: 'profile' as const, label: 'Profile' }
-            ].map(({ id, label }) => (
-              <button
-                key={id}
-                onClick={() => setActiveTab(id)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  activeTab === id
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </nav>
-        </div>
-
         {showReportForm && (
           <ReportForm
             onClose={() => setShowReportForm(false)}
-            onSuccess={handleReportSuccess}
+            onSuccess={() => {
+              handleReportSuccess();
+              setActiveTab('recent'); // Navigate to Recent tab to see the new report
+            }}
           />
         )}
 

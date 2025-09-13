@@ -27,14 +27,38 @@ export const ReportsProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   // Load data from localStorage on mount
   useEffect(() => {
+    const dataVersion = localStorage.getItem('civic-radar-data-version');
+    const currentVersion = '2.0'; // Updated version to force refresh
+    
+    // If version doesn't match, clear old data and use fresh dummy data
+    if (dataVersion !== currentVersion) {
+      localStorage.removeItem('civic-radar-reports');
+      localStorage.removeItem('civic-radar-notifications');
+      localStorage.setItem('civic-radar-data-version', currentVersion);
+      setReports(dummyReports);
+      setNotifications(dummyNotifications);
+      return;
+    }
+    
     const savedReports = localStorage.getItem('civic-radar-reports');
     const savedNotifications = localStorage.getItem('civic-radar-notifications');
     
     if (savedReports) {
-      setReports(JSON.parse(savedReports));
+      const parsedReports = JSON.parse(savedReports);
+      // Ensure we have at least the dummy reports
+      if (parsedReports.length < dummyReports.length) {
+        setReports(dummyReports);
+      } else {
+        setReports(parsedReports);
+      }
+    } else {
+      setReports(dummyReports);
     }
+    
     if (savedNotifications) {
       setNotifications(JSON.parse(savedNotifications));
+    } else {
+      setNotifications(dummyNotifications);
     }
   }, []);
 

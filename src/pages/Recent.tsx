@@ -19,8 +19,12 @@ const Recent: React.FC<RecentProps> = ({ onReportClick }) => {
     'Garbage',
     'Tree Fall',
     'Water Leak',
+    'Traffic',
+    'Infrastructure',
+    'Safety',
     'Resolved',
-    'In Progress'
+    'In Progress',
+    'Reported'
   ];
 
   const filteredReports = useMemo(() => {
