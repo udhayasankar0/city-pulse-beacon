@@ -5,8 +5,8 @@ import { Incident } from '@/types/incident';
 import EXIF from 'exif-js';
 
 interface ReportFormProps {
-  onSubmit: (incident: Omit<Incident, 'id' | 'timestamp'>) => void;
-  existingIncidents: Incident[];
+  onClose: () => void;
+  onSuccess?: () => void;
 }
 
 const ReportForm: React.FC<ReportFormProps> = ({ onSubmit }) => {

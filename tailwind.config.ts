@@ -18,7 +18,38 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				inter: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+			},
 			colors: {
+				// Brand Colors
+				brand: {
+					400: 'hsl(var(--brand-400))',
+					500: 'hsl(var(--brand-500))',
+					600: 'hsl(var(--brand-600))',
+					700: 'hsl(var(--brand-700))',
+				},
+				accent: {
+					400: 'hsl(var(--accent-400))',
+					600: 'hsl(var(--accent-600))',
+				},
+				success: {
+					500: 'hsl(var(--success-500))',
+				},
+				warning: {
+					500: 'hsl(var(--warning-500))',
+				},
+				danger: {
+					500: 'hsl(var(--danger-500))',
+				},
+				// App Colors
+				bg: 'hsl(var(--bg))',
+				'card-bg': 'hsl(var(--card-bg))',
+				'soft-border': 'hsl(var(--soft-border))',
+				'text': 'hsl(var(--text))',
+				'text-muted': 'hsl(var(--text-muted))',
+				
+				// Design System Tokens
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -40,28 +71,14 @@ export default {
 					DEFAULT: 'hsl(var(--muted))',
 					foreground: 'hsl(var(--muted-foreground))'
 				},
-				accent: {
-					DEFAULT: 'hsl(var(--accent))',
-					foreground: 'hsl(var(--accent-foreground))'
-				},
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',
 					foreground: 'hsl(var(--popover-foreground))'
 				},
 				card: {
-					DEFAULT: 'hsl(var(--card))',
+					DEFAULT: 'hsl(var(--card-bg))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
-				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
